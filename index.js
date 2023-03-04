@@ -23,6 +23,7 @@ mongoose.connect(process.env.DB_URI, {
 
 // router
 app.use("/api/posts", require("./routes/posts.routes"));
+app.use("/api/auth", require("./routes/auth.routes"));
 
 // start server
 app.listen(PORT, () => console.log(`servidor corriendo en el puerto ${PORT}`));
