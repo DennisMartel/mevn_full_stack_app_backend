@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const { tokenSign } = require("../utils/generateToken");
+const { tokenSign, decodeToken } = require("../utils/generateToken");
 
 const signin = async (req, res) => {
     try {
@@ -26,7 +26,6 @@ const signin = async (req, res) => {
         return res.status(200).json({
             _id: user._id,
             accessToken: tokenSession,
-            message: "",
         });
     } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -71,8 +70,41 @@ const signup = async (req, res) => {
         return res.status(200).json({ 
             _id: userSaved._id,
             accessToken: tokenSession,
-            message: ""
         });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+const logout = () => {
+    try {
+        
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+const refreshToken = async (req, res) => {
+    try {
+        const { refreshToken, userId } = req.body;
+
+        const decoded = decodeToken(refreshToken);
+
+        if(decoded.id == userId) {
+            const user = await User.findById(userId);
+
+            if (user) {
+                const tokenSession = tokenSign(user);
+        
+                return res.status(200).json({ 
+                    _id: userId,
+                    accessToken: tokenSession,
+                    success: true
+                });
+            }
+        }
+
+        return res.status(401).json({ success: false, error: "Token inválido, intenta de nuevo" });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -80,5 +112,7 @@ const signup = async (req, res) => {
 
 module.exports = {
     signin,
-    signup
+    signup,
+    logout,
+    refreshToken
 }

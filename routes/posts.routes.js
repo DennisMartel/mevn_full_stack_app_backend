@@ -1,5 +1,6 @@
 const express = require("express");
 const multer = require("multer");
+const { isAuthenticated } = require("../middlewares/isAuthenticated")
 
 const router = express.Router();
 const PostController = require("../controllers/PostController");
@@ -16,7 +17,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage }).single("image");
 
-router.get("/", PostController.getPosts);
+router.get("/", isAuthenticated, PostController.getPosts);
 router.get("/:id", PostController.getPostById);
 router.post("/", upload, PostController.setPost);
 router.put("/:id", upload, PostController.updatePost);

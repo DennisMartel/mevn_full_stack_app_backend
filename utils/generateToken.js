@@ -9,7 +9,7 @@ const tokenSign = (payload) => {
         },
         process.env.JWT_SECRET,
         {
-            expiresIn: "1m"
+            expiresIn: "5m"
         }
     )
 }
@@ -29,5 +29,5 @@ const decodeToken = (token) => {
 module.exports = {
     tokenSign,
     verifyToken,
-    decodeToken
+    decodeToken,
 }
